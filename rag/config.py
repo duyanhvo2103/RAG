@@ -5,7 +5,7 @@ DIR = os.getcwd()
 PDF_DIR = os.path.join(DIR, "data", "pdf")
 QDRANT_PATH = os.path.join(DIR, "data", "qdrant")
 DOCSTORE_PATH = os.path.join(DIR, "data", "docstore.pkl")
-RERANK_LOG_DIR = os.path.join(DIR, "data", "docstore.pkl")
+RERANK_LOG_DIR = os.path.join(DIR, "data", "analysis")
 SETTINGS_FILE = os.path.join(DIR, "data", "rag_settings.json")
 
 EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
