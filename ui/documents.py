@@ -12,6 +12,8 @@ def show_document():
 
     st.title("Document Library")
 
+    if not os.path.exists(PDF_DIR):
+        os.makedirs(PDF_DIR, exist_ok=True)
     # Get the PDF list
     pdfs = [f for f in os.listdir(PDF_DIR) if f.lower().endswith(".pdf")]
     pdfs.sort()
