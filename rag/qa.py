@@ -8,6 +8,7 @@ from rag.config import RERANK_LOG_DIR
 import os, json
 from datetime import datetime
 import streamlit as st
+import traceback
 
 TOP_K_PARENT = ss.rag_settings["top_k"]
 LLM_MODEL = ss.rag_settings["llm_model"]
@@ -82,14 +83,8 @@ def answer_question(query: str):
 
     # Quota / rate limit
     except Exception as e:
-        error_msg = str(e).lower()
-
-        if "quota" in error_msg or "429" in error_msg or "resource_exhausted" in error_msg:
-            answer = "The system is temporarily out of quota. Please try again later."
-        elif "timeout" in error_msg:
-            answer = "The request timed out. Please try again."
-        else:
-            answer = "An unexpected error occurred. Please try again later."
+        traceback.print_exc()   # in full error ra log
+        answer = f"DEBUG ERROR: {str(e)}"
 
         print("LLM ERROR:", e)
 
