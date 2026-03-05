@@ -4,65 +4,74 @@ from rag.qa import answer_question
 def show_ask():
     st.set_page_config(
         page_title="RAG Assistant",
-        layout="wide", 
+        layout="wide",
         initial_sidebar_state="collapsed"
     )
 
     st.title("RAG Assistant")
 
-    # Session state
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Render chat history
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
+    if "chat_disabled" not in st.session_state:
+        st.session_state.chat_disabled = False
 
-            # Hiển thị sources nếu có
-            if msg["role"] == "assistant" and "sources" in msg:
-                with st.expander("Sources"):
-                    for idx, src in enumerate(msg["sources"], 1):
-                        st.markdown(
-                            f"**{idx}.** `{src['file']}` — page {src['page']}"
-                        )
+    chat_container = st.container(height=600)
 
-    # Chat input
-    q = st.chat_input("Ask something about your documents...")
+    # Render history
+    with chat_container:
+        for msg in st.session_state.messages:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["content"])
 
-    if q:
-        # Show user message
-        st.session_state.messages.append({
-            "role": "user",
-            "content": q
-        })
+                if msg["role"] == "assistant" and msg.get("sources"):
+                    with st.expander("Sources"):
+                        for idx, src in enumerate(msg["sources"], 1):
+                            st.markdown(
+                                f"**{idx}.** `{src['file']}` — page {src['page']}"
+                            )
 
-        with st.chat_message("user"):
-            st.markdown(q)
+        if not st.session_state.chat_disabled:
+            user_input = st.chat_input("Ask something about your documents...")
 
-        # Assistant response
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                ans, ranked_parents = answer_question(q)
+            if user_input:
+                st.session_state.chat_disabled = True
 
-            st.markdown(ans)
+                st.session_state.pending_question = user_input
 
-            sources = []
-            for doc, score in ranked_parents:
-                sources.append({
-                    "file": doc.metadata.get("source", "Unknown"),
-                    "page": doc.metadata.get("page_number", "N/A")
+                st.rerun()
+
+        if st.session_state.chat_disabled:
+            question = st.session_state.get("pending_question")
+
+            if question:
+                st.session_state.messages.append({
+                    "role": "user",
+                    "content": question
                 })
 
-            if sources:
-                with st.expander("Sources"):
-                    for idx, src in enumerate(sources, 1):
-                        st.markdown(
-                            f"**{idx}.** `{src['file']}` — page {src['page']}"
-                        )
+                with st.chat_message("user"):
+                    st.markdown(question)
 
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": ans,
-            "sources": sources
-        })
+                with st.chat_message("assistant"):
+                    with st.spinner("Thinking..."):
+                        ans, ranked_parents = answer_question(question)
+
+                sources = [
+                    {
+                        "file": doc.metadata.get("source", "Unknown"),
+                        "page": doc.metadata.get("page_number", "N/A")
+                    }
+                    for doc, _ in ranked_parents
+                ]
+
+                st.session_state.messages.append({
+                    "role": "assistant",
+                    "content": ans,
+                    "sources": sources
+                })
+
+                st.session_state.chat_disabled = False
+                st.session_state.pending_question = None
+
+                st.rerun()
