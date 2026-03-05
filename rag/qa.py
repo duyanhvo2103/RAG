@@ -56,26 +56,25 @@ def answer_question(query: str):
     context = "\n\n---\n\n".join(top_docs)
 
     prompt = f"""
-        You are a RAG-based assistant. Your task is to answer the question strictly from the provided context.
-
-        Rules:
-        - Use ONLY the information explicitly stated in the context.
-        - Do NOT infer, guess, or rely on prior knowledge.
-        - If the answer is not explicitly supported by the context, respond exactly:
-        "I don't know based on the provided context."
-        - Answer in the same language as the question.
-        - Keep the answer concise and factual.
-
-        Context:
-        ---------------------
-        {context}
-        ---------------------
-
-        Question:
-        {query}
-
-        Final Answer:
-        """
+            You are a RAG-based assistant. Your task is to answer the question strictly using the provided context.
+            
+            Rules:
+            - Use ONLY the information explicitly stated in the context.
+            - Do NOT infer, guess, or rely on prior knowledge.
+            - If the answer is not explicitly supported by the context, say that you do not know based on the context.
+            - The response MUST be in the same language as the user's question.
+            - Keep the answer concise and factual.
+            
+            Context:
+            ---------------------
+            {context}
+            ---------------------
+            
+            Question:
+            {query}
+            
+            Final Answer:
+            """
 
     try:
         response = llm.invoke(prompt)
