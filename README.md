@@ -1,4 +1,4 @@
-# 🚀 Advanced RAG System with Hierarchical Retrieval, Re-ranking & Streamlit UI
+# Advanced RAG System with Hierarchical Retrieval, Re-ranking & Streamlit UI
 
 A production-oriented **Retrieval-Augmented Generation (RAG)** system featuring:
 
@@ -11,22 +11,22 @@ A production-oriented **Retrieval-Augmented Generation (RAG)** system featuring:
 ## Demo project: [Website](https://duyanh-rag.streamlit.app/)
 ---
 
-## 📌 Project Overview
+## 1. Project Overview
 
 This project implements an advanced **RAG pipeline** optimized for:
 
-- 🔎 High-precision document retrieval  
-- 🧠 Hallucination control  
-- 🏗 Hierarchical document structuring  
-- ⚙ Configurable chunking strategy  
-- 💾 Local vector storage  
-- 📊 Transparent re-ranking analysis  
+- High-precision document retrieval  
+- Hallucination control  
+- Hierarchical document structuring  
+- Configurable chunking strategy  
+- Local vector storage  
+- Transparent re-ranking analysis  
 
 Users can upload PDF documents and ask questions grounded **strictly in the uploaded content**.
 
 ---
 
-## 🧠 Architecture Overview
+## 2. Architecture Overview
 ```bash
 PDF → Parent Chunking → Child Chunking → Embedding → Qdrant
                                                    ↓
@@ -41,9 +41,9 @@ User Query → Embed → Child Retrieval → Parent Mapping
 
 ---
 
-# 🔥 Key Features
+## 3. Key Features
 
-## ✅ 1. Hierarchical Chunking Strategy (Parent–Child)
+### 3.1 Hierarchical Chunking Strategy (Parent–Child)
 
 Instead of flat chunking, the system uses a two-level retrieval design:
 
@@ -51,7 +51,7 @@ Instead of flat chunking, the system uses a two-level retrieval design:
 - **Child Chunks** → Embedded & stored in Qdrant
 - Retrieval happens at **child level → aggregated back to parent**
 
-### 🎯 Benefits
+#### Benefits
 
 - Better semantic granularity  
 - More precise retrieval  
@@ -60,7 +60,7 @@ Instead of flat chunking, the system uses a two-level retrieval design:
 
 ---
 
-## ✅ 2. Local Vector Database (Qdrant)
+### 3.2 Local Vector Database (Qdrant)
 
 - Runs locally (disk mode)
 - Auto-creates collection if missing
@@ -74,13 +74,13 @@ Instead of flat chunking, the system uses a two-level retrieval design:
 
 ---
 
-## ✅ 3. Cross-Encoder Re-ranking
+### 3.3 Cross-Encoder Re-ranking
 
 Initial vector search retrieves candidates → then refined using:
 
         SentenceTransformers CrossEncoder
 
-### Benefits
+#### Benefits
 
 - Improved ranking precision  
 - Reduced semantic mismatch  
@@ -90,7 +90,7 @@ Re-ranking results are logged into JSON files for transparency.
 
 ---
 
-## ✅ 4. Strict Grounded Answering (Anti-Hallucination)
+### 3.4 Strict Grounded Answering (Anti-Hallucination)
 
 The LLM is strictly instructed to:
 
@@ -104,7 +104,7 @@ The LLM is strictly instructed to:
 
 if unsupported.
 
-### Suitable for:
+#### Suitable for:
 
 - Legal documents  
 - Regulations  
@@ -113,7 +113,7 @@ if unsupported.
 
 ---
 
-## ✅ 5. Configurable RAG Settings (Runtime)
+### 3.5 Configurable RAG Settings (Runtime)
 
 All critical parameters are controlled via `session_state`:
 
@@ -132,7 +132,7 @@ Allows live experimentation **without code changes**.
 
 ---
 
-# 🗂 Project Structure
+## 4. Project Structure
 ```bash
 data/
 ├── analysis/
@@ -168,7 +168,7 @@ README.md
 
 ---
 
-# ⚙️ Technical Stack
+## 5. Technical Stack
 
 | Component        | Technology |
 |------------------|------------|
@@ -182,9 +182,9 @@ README.md
 
 ---
 
-# 🧩 Core Pipeline Explained
+## 6. Core Pipeline Explained
 
-## 1️⃣ Ingestion
+### 6.1 Ingestion
 
 - Extract text from PDF  
 - Clean text  
@@ -197,7 +197,7 @@ README.md
 
 ---
 
-## 2️⃣ Retrieval
+### 6.2 Retrieval
 
 - Embed query  
 - Search top-N child chunks  
@@ -206,7 +206,7 @@ README.md
 
 ---
 
-## 3️⃣ Re-ranking
+### 6.3 Re-ranking
 
 - Use CrossEncoder on `(query, parent_chunk)`  
 - Sort by relevance score  
@@ -215,7 +215,7 @@ README.md
 
 ---
 
-## 4️⃣ Answer Generation
+### 6.4 Answer Generation
 
 - Construct strict grounding prompt  
 - Inject reranked parent content  
@@ -230,7 +230,7 @@ System returns user-friendly messages instead of crashing.
 
 ---
 
-# 🛡 Error Handling
+## 7. Error Handling
 
 LLM-related errors handled gracefully:
 
@@ -243,7 +243,7 @@ Ensures production robustness.
 
 ---
 
-# 📊 Analysis & Transparency
+## 8. Analysis & Transparency
 
 Each query stores logs in:
 
@@ -267,26 +267,8 @@ Includes:
 
 ---
 
-# 🚀 How to Run
 
-## 1️⃣ Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-## 2️⃣ Add Google API Key
-
-In Streamlit secrets:
-```bash
-GOOGLE_API_KEY = "your_key_here"
-```
-
-3️⃣ Run app
-```bash
-streamlit run app.py
-```
-
-# 📈 Why This Project Stands Out
+## 8. Why This Project Stands Out
 
 This is NOT a basic RAG demo.
 
@@ -318,7 +300,7 @@ It reflects understanding of:
 
 * System design thinking
 
-# 🎯 Potential Improvements (Future Work)
+## 9. Potential Improvements (Future Work)
 
 * Hybrid BM25 + Dense retrieval
 
