@@ -8,7 +8,7 @@ A production-oriented **Retrieval-Augmented Generation (RAG)** system featuring:
 - Strict grounded answering (anti-hallucination)
 - Transparent retrieval logging
 - Streamlit-based interactive UI
-
+## Demo project: [Website](https://duyanh-rag.streamlit.app/)
 ---
 
 ## 📌 Project Overview
